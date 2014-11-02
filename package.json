@@ -1,22 +1,28 @@
 {
-  "name" : "easydate",
-  "main" : "easydate.js",
-  "files" : [ "easydate.js", "test.js" ],
-  "version" : "1.0.1",
-  "description" : "get date and/or time by pattern",
-  "keywords" : [ "date", "time" ],
-  "homepage" : "https://github.com/roryrjb/easydate",
-  "author" : "Rory Bradford <roryrjb@gmail.com> (www.roryrjb.com)",
-  "repository" : {
-    "type" : "git", 
-    "url" : "https://github.com/roryrjb/easydate.git"
+  "name": "easydate",
+  "main": "easydate.js",
+  "files": [
+    "easydate.js",
+    "test.js"
+  ],
+  "version": "1.0.2",
+  "description": "get date and/or time by pattern",
+  "keywords": [
+    "date",
+    "time"
+  ],
+  "homepage": "https://github.com/roryrjb/easydate",
+  "author": "Rory Bradford <roryrjb@gmail.com> (www.roryrjb.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roryrjb/easydate.git"
   },
-  "license" : "MIT",
-  "bugs" : {
-    "url" : "http://github.com/roryrjb/easydate/issues",
-    "email" : "roryrjb@gmail.com"
-  }, 
-  "scripts" : {
-    "test" : "node test"
+  "license": "MIT",
+  "bugs": {
+    "url": "http://github.com/roryrjb/easydate/issues",
+    "email": "roryrjb@gmail.com"
+  },
+  "scripts": {
+    "test": "node test"
   }
 }
