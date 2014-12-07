@@ -3,11 +3,15 @@
   "main": "easydate.js",
   "files": [
     "easydate.js",
-    "test.js"
+    "test.js",
+    "LICENSE.md"
   ],
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "get date and/or time by pattern",
   "keywords": [
+    "datetime",
+    "dateformat",
+    "formatting",
     "date",
     "time"
   ],

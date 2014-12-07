@@ -1,26 +1,30 @@
 'use strict';
 
-function tidyNumber(value) {
-  if (value < 10) {
-    return '0' + String(value);
+module.exports = function (pattern, setDate) {
+  var date;
+  function tidyNumber(value) {
+    if (value < 10) {
+      return '0' + String(value);
+    }
+    return String(value);
   }
-  return String(value);
-}
-
-function tidyMs(value) {
-  if (value < 10) {
-    return '00' + String(value);
+  function tidyMs(value) {
+    if (value < 10) {
+      return '00' + String(value);
+    }
+    if (value < 100) {
+      return '0' + String(value);
+    }
+    return String(value);
   }
-  if (value < 100) {
-    return '0' + String(value);
+  if (setDate) {
+    if (String(Date.parse(setDate)) === 'NaN') {
+      throw new Error('The supplied date string was not formatted correctly.');
+    }
+    date = new Date(setDate);
+  } else {
+    date = new Date();
   }
-  return String(value);
-}
-
-module.exports = function (pattern) {
-
-  var date = new Date();
-
   return pattern
     .replace('d', tidyNumber(date.getUTCDate()))
     .replace('M', tidyNumber(date.getUTCMonth() + 1))
@@ -30,5 +34,4 @@ module.exports = function (pattern) {
     .replace('m', tidyNumber(date.getMinutes()))
     .replace('s', tidyNumber(date.getSeconds()))
     .replace('l', tidyMs(date.getMilliseconds()));
-
 };
