@@ -6,7 +6,7 @@
     "test.js",
     "LICENSE.md"
   ],
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "get date and/or time by pattern",
   "keywords": [
     "datetime",
@@ -15,6 +15,9 @@
     "date",
     "time"
   ],
+  "engines" : {
+    "node" : ">=0.10.0"
+  },
   "homepage": "https://github.com/roryrjb/easydate",
   "author": "Rory Bradford <roryrjb@gmail.com> (www.roryrjb.com)",
   "repository": {
