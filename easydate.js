@@ -1,29 +1,29 @@
-'use strict';
+'use strict'
 
-module.exports = function (pattern, setDate) {
-  var date;
-  function tidyNumber(value) {
+function easydate (pattern, setDate) {
+  var date
+  function tidyNumber (value) {
     if (value < 10) {
-      return '0' + String(value);
+      return '0' + String(value)
     }
-    return String(value);
+    return String(value)
   }
-  function tidyMs(value) {
+  function tidyMs (value) {
     if (value < 10) {
-      return '00' + String(value);
+      return '00' + String(value)
     }
     if (value < 100) {
-      return '0' + String(value);
+      return '0' + String(value)
     }
-    return String(value);
+    return String(value)
   }
   if (setDate) {
     if (String(Date.parse(setDate)) === 'NaN') {
-      throw new Error('The supplied date string was not formatted correctly.');
+      throw new Error('The supplied date string was not formatted correctly.')
     }
-    date = new Date(setDate);
+    date = new Date(setDate)
   } else {
-    date = new Date();
+    date = new Date()
   }
   return pattern
     .replace('d', tidyNumber(date.getUTCDate()))
@@ -33,5 +33,13 @@ module.exports = function (pattern, setDate) {
     .replace('h', tidyNumber(date.getHours()))
     .replace('m', tidyNumber(date.getMinutes()))
     .replace('s', tidyNumber(date.getSeconds()))
-    .replace('l', tidyMs(date.getMilliseconds()));
-};
+    .replace('l', tidyMs(date.getMilliseconds()))
+}
+
+if (typeof module === 'object') {
+  module.exports = easydate
+}
+
+if (typeof window === 'object') {
+  window.easydate = easydate
+}

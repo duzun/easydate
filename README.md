@@ -14,6 +14,12 @@ __Test:__
 $ npm test
 ```
 
+_Typical benchmark output:_
+
+```
+1000000 samples run in 7340 ms (136239 ops/sec)
+```
+
 ### Usage/API
 
 __easydate(patternString, [inputDate])__
