@@ -21,18 +21,20 @@ assert.equal(easydate('M/d/Y', '03-01-2017'), '03/01/2017')
 assert.equal(easydate('M/d/Y', '01-01-2017'), '01/01/2017')
 assert.equal(easydate('M/d/Y', '12-31-3045'), '12/31/3045')
 
-console.log('Tests passed.')
+// if a valid is supplied but that value is falsy then return `null`
+assert.equal(easydate('M/d/Y', null), null)
+assert.equal(easydate('M/d/Y', undefined), null)
+assert.equal(easydate('M/d/Y', 0), null)
+assert.equal(easydate('M/d/Y', ''), null)
 
-// benchmarks
-
-console.log('Benchmarking...')
-var start = Date.now()
-var count = 1000000
-
-for (var i = 0; i < count; i++) {
-  easydate('d-M-Y @ h:m', new Date().toISOString())
+// invalid string (aside from an empty string) will throw
+try {
+  easydate('M/d/Y', 'not valid')
+} catch (exception) {
+  assert(exception)
 }
 
-var diff = (Date.now() - start)
-console.log(count + ' samples run in ' + diff +
-  ' ms (' + Math.floor((1000 / diff) * count) + ' ops/sec)')
+// with a single argument a date string will be returned
+assert.equal(typeof easydate('M/d/Y'), 'string')
+
+console.log('Tests passed.')

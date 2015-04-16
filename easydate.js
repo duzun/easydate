@@ -1,6 +1,12 @@
 'use strict'
 
 function easydate (pattern, setDate) {
+  if (arguments.length > 1) {
+    if (setDate === undefined) return null
+    if (setDate === null) return null
+    if (setDate === 0) return null
+    if (setDate === '') return null
+  }
   var date
   function tidyNumber (value) {
     if (value < 10) {

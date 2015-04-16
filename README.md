@@ -1,4 +1,4 @@
-# easydate [![Build Status](https://travis-ci.org/roryrjb/easydate.svg?branch=master)](https://travis-ci.org/roryrjb/easydate)
+# easydate [![Build Status](https://travis-ci.org/roryrjb/easydate.svg?branch=master)](https://travis-ci.org/roryrjb/easydate) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 > Returns the date according to a pattern.
 
@@ -12,12 +12,6 @@ __Test:__
 
 ```
 $ npm test
-```
-
-_Typical benchmark output:_
-
-```
-1000000 samples run in 7340 ms (136239 ops/sec)
 ```
 
 ### Usage/API
