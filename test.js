@@ -27,6 +27,8 @@ assert.equal(easydate('M/d/Y', undefined), null)
 assert.equal(easydate('M/d/Y', 0), null)
 assert.equal(easydate('M/d/Y', ''), null)
 
+assert.notEqual(easydate('z'), null)
+
 // invalid string (aside from an empty string) will throw
 try {
   easydate('M/d/Y', 'not valid')
