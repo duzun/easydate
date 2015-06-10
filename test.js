@@ -2,32 +2,38 @@
 
 var easydate = require('./easydate')
 var assert = require('assert')
+var offset = new Date().getTimezoneOffset()
 
-assert.equal(easydate('d/M/y', '2016-10-01T00:00:00.000Z'), '01/10/16')
-assert.equal(easydate('d/M/Y', '2015-11-03T00:00:00.000Z'), '03/11/2015')
-assert.equal(easydate('d-M-Y @ h:m', '2015-11-03T16:06:00.000Z'), '03-11-2015 @ 16:06')
-assert.equal(easydate('h:m:s', '2015-11-03T16:06:08.000Z'), '16:06:08')
-assert.equal(easydate('h:m:s.l', '2015-11-03T16:06:08.123Z'), '16:06:08.123')
+assert.equal(easydate('d/M/y', {
+  setDate: '2016-10-01T00:00:00.000Z', timeZone: 'local'
+}), '01/10/16')
 
-assert.equal(easydate('d-M-y', '03/01/2017'), '01-03-17')
-assert.equal(easydate('M~d~Y', '03/01/2017'), '03~01~2017')
-assert.equal(easydate('M/d/Y', '03/01/2017'), '03/01/2017')
-assert.equal(easydate('M/d/Y', '01/01/2017'), '01/01/2017')
-assert.equal(easydate('M/d/Y', '12/31/3045'), '12/31/3045')
+assert.equal(
+  easydate('d/M/y', {setDate: '2016-10-01T00:00:00.000Z', timeZone: 'utc'}),
+  offset > 0 || offset === 0 ? '01/10/16' : '30/09/16'
+)
 
-assert.equal(easydate('d-M-y', '03-01-2017'), '01-03-17')
-assert.equal(easydate('M~d~Y', '03-01-2017'), '03~01~2017')
-assert.equal(easydate('M/d/Y', '03-01-2017'), '03/01/2017')
-assert.equal(easydate('M/d/Y', '01-01-2017'), '01/01/2017')
-assert.equal(easydate('M/d/Y', '12-31-3045'), '12/31/3045')
+assert.equal(easydate('d/M/Y', {setDate: '2015-11-03T00:00:00.000Z'}), '03/11/2015')
+assert.equal(easydate('d-M-Y @ h:m', {setDate: '2015-11-03T16:06:00.000Z'}), '03-11-2015 @ 16:06')
+assert.equal(easydate('h:m:s', {setDate: '2015-11-03T16:06:08.000Z'}), '16:06:08')
+assert.equal(easydate('h:m:s.l', {setDate: '2015-11-03T16:06:08.123Z'}), '16:06:08.123')
 
-// if a valid is supplied but that value is falsy then return `null`
-assert.equal(easydate('M/d/Y', null), null)
-assert.equal(easydate('M/d/Y', undefined), null)
-assert.equal(easydate('M/d/Y', 0), null)
-assert.equal(easydate('M/d/Y', ''), null)
+assert.equal(easydate('h', {setDate: '2015-11-03T16:06:08.000Z', timeZone: 'local'}), '16')
 
-assert.notEqual(easydate('z'), null)
+assert.equal(easydate('d-M-y', {setDate: '03/01/2017'}), '01-03-17')
+assert.equal(easydate('M~d~Y', {setDate: '03/01/2017'}), '03~01~2017')
+assert.equal(easydate('M/d/Y', {setDate: '03/01/2017'}), '03/01/2017')
+assert.equal(easydate('M/d/Y', {setDate: '01/01/2017'}), '01/01/2017')
+assert.equal(easydate('M/d/Y', {setDate: '12/31/3045'}), '12/31/3045')
+
+assert.equal(easydate('d-M-y', {setDate: '03-01-2017'}), '01-03-17')
+assert.equal(easydate('M~d~Y', {setDate: '03-01-2017'}), '03~01~2017')
+assert.equal(easydate('M/d/Y', {setDate: '03-01-2017'}), '03/01/2017')
+assert.equal(easydate('M/d/Y', {setDate: '01-01-2017'}), '01/01/2017')
+assert.equal(easydate('M/d/Y', {setDate: '12-31-3045'}), '12/31/3045')
+
+assert.notEqual(easydate('z', {setDate: '2015-11-03T16:06:00.000Z'}), null)
+assert.notEqual(easydate('z', {setDate: '2015-11-03T16:06:00.000Z', timeZone: 'utc'}), null)
 
 // invalid string (aside from an empty string) will throw
 try {

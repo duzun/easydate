@@ -1,13 +1,20 @@
 'use strict'
 
-function easydate (pattern, setDate) {
-  if (arguments.length > 1) {
-    if (setDate === undefined) return null
-    if (setDate === null) return null
-    if (setDate === 0) return null
-    if (setDate === '') return null
+function dst (date) {
+  function stdTimezoneOffset (date) {
+    var jan = new Date(date.getFullYear(), 0, 1)
+    var jul = new Date(date.getFullYear(), 6, 1)
+    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset())
   }
+  return stdTimezoneOffset(date) - date.getTimezoneOffset()
+}
+
+function easydate (pattern, config) {
+  var HOUR = 3600000
+  var setDate = config ? config.setDate : null
+  var time = config && config.timeZone ? config.timeZone : 'local'
   var date
+  if (config && 'setDate' in config && !setDate) return null
   function tidyNumber (value) {
     if (value < 10) return '0' + String(value)
     return String(value)
@@ -25,17 +32,35 @@ function easydate (pattern, setDate) {
   } else {
     date = new Date()
   }
-  var tz = date.toUTCString().split(' ')
+  var offset = new Date().getTimezoneOffset() + dst(date)
+  if (time === 'local') {
+    var offsetString = 'UTC'
+    if (offset < 0) offsetString += '+' + (String(offset).slice(1) / 60)
+    if (offset > 0) offsetString += '-' + (offset / 60)
+    return pattern
+    .replace('d', tidyNumber(date.getDate()))
+    .replace('M', tidyNumber(date.getMonth() + 1))
+    .replace('y', String(date.getFullYear()).substring(2, 4))
+    .replace('Y', String(date.getFullYear()))
+    .replace('h', tidyNumber(date.getHours()))
+    .replace('m', tidyNumber(date.getMinutes()))
+    .replace('s', tidyNumber(date.getSeconds()))
+    .replace('l', tidyMs(date.getMilliseconds()))
+    .replace('z', offsetString)
+  }
+  if (offset < 0) date = new Date(date.valueOf() + (+offset * 60000))
+  if (offset > 0) date = new Date(date.valueOf() - (+offset * 60000))
+  // if (dst(date)) date = new Date(date.valueOf() + HOUR)
   return pattern
   .replace('d', tidyNumber(date.getUTCDate()))
   .replace('M', tidyNumber(date.getUTCMonth() + 1))
   .replace('y', String(date.getUTCFullYear()).substring(2, 4))
   .replace('Y', String(date.getUTCFullYear()))
-  .replace('h', tidyNumber(date.getHours()))
-  .replace('m', tidyNumber(date.getMinutes()))
-  .replace('s', tidyNumber(date.getSeconds()))
-  .replace('l', tidyMs(date.getMilliseconds()))
-  .replace('z', tz[tz.length - 1])
+  .replace('h', tidyNumber(date.getUTCHours()))
+  .replace('m', tidyNumber(date.getUTCMinutes()))
+  .replace('s', tidyNumber(date.getUTCSeconds()))
+  .replace('l', tidyMs(date.getUTCMilliseconds()))
+  .replace('z', 'UTC')
 }
 
 if (typeof module === 'object') module.exports = easydate
