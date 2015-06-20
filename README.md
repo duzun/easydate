@@ -24,17 +24,69 @@ __`config`__ (object)
 
 __`.setDate`__ (string)
 
+DEFAULT: `null`
+
 if the optional config object is supplied and includes a date string as the `setDate` key value, that particular date will be returned formatted. This input date string must be parseable by JavaScript's `Date.parse` function; see below for acceptable examples.
 
 __`.timeZone`__ (string: `utc` or `local` only) _BREAKING CHANGE!!!_
 
-You can also include a `timeZone` key value, for either `local`, or `utc` to decide how to handle the time zone offset against UTC. _Importantly_ if using `UTC` then the offset is automatically determined and the date will change accordingly. See example below (this is in my local time zone, currently UTC+1 and at 17:55):
+DEFAULT: `local`
+
+You can also include a `timeZone` key value, for either `local`, or `utc` to decide how to handle the time zone offset against UTC.
+
+__`.adjust`__ (boolean)
+
+DEFAULT: `false`
+
+Whether or not to adjust DST, see _times_ below.
+
+__Times:__
 
 ```
-easydate('d/M/y', {setDate: '2016-10-01T00:00:00.000Z', timeZone: 'utc'}) // => "30/09/16"
-easydate('d-M-Y', {setDate: '2016-10-01T00:00:00.000Z', timeZone: 'local'}) // => "01-10-2016"
-easydate('h:m z', {timeZone: 'utc'}) // => "16:55 UTC"
-easydate('h:m z', {timeZone: 'local'}) // => "17:55 UTC+1"
+-- local --
+
+2016-01-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-02-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-03-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-04-01T00:00:00.000Z --> 01:00:00 UTC+1 DST
+2016-05-01T00:00:00.000Z --> 01:00:00 UTC+1 DST
+2016-06-01T00:00:00.000Z --> 01:00:00 UTC+1 DST
+2016-07-01T00:00:00.000Z --> 01:00:00 UTC+1 DST
+2016-08-01T00:00:00.000Z --> 01:00:00 UTC+1 DST
+2016-09-01T00:00:00.000Z --> 01:00:00 UTC+1 DST
+2016-10-01T00:00:00.000Z --> 01:00:00 UTC+1 DST
+2016-11-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-12-01T00:00:00.000Z --> 00:00:00 UTC+1
+
+-- local {adjust: true} --
+
+2016-01-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-02-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-03-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-04-01T00:00:00.000Z --> 00:00:00 UTC+1 DST
+2016-05-01T00:00:00.000Z --> 00:00:00 UTC+1 DST
+2016-06-01T00:00:00.000Z --> 00:00:00 UTC+1 DST
+2016-07-01T00:00:00.000Z --> 00:00:00 UTC+1 DST
+2016-08-01T00:00:00.000Z --> 00:00:00 UTC+1 DST
+2016-09-01T00:00:00.000Z --> 00:00:00 UTC+1 DST
+2016-10-01T00:00:00.000Z --> 00:00:00 UTC+1 DST
+2016-11-01T00:00:00.000Z --> 00:00:00 UTC+1
+2016-12-01T00:00:00.000Z --> 00:00:00 UTC+1
+
+-- utc --
+
+2016-01-01T00:00:00.000Z --> 00:00:00 UTC
+2016-02-01T00:00:00.000Z --> 00:00:00 UTC
+2016-03-01T00:00:00.000Z --> 00:00:00 UTC
+2016-04-01T00:00:00.000Z --> 00:00:00 UTC DST
+2016-05-01T00:00:00.000Z --> 00:00:00 UTC DST
+2016-06-01T00:00:00.000Z --> 00:00:00 UTC DST
+2016-07-01T00:00:00.000Z --> 00:00:00 UTC DST
+2016-08-01T00:00:00.000Z --> 00:00:00 UTC DST
+2016-09-01T00:00:00.000Z --> 00:00:00 UTC DST
+2016-10-01T00:00:00.000Z --> 00:00:00 UTC DST
+2016-11-01T00:00:00.000Z --> 00:00:00 UTC
+2016-12-01T00:00:00.000Z --> 00:00:00 UTC
 ```
 
 __Examples:__
@@ -60,6 +112,9 @@ easydate('d/M/y', {setDate: '2016-10-01T00:00:00.000Z', timeZone: 'local'}) // =
 
 easydate('z', {timeZone: 'utc'}) // => "UTC"
 easydate('z', {timeZone: 'local'}) // => "UTC+1"
+
+easydate('h:m:s z x', {setDate: '2016-08-01T00:00:00.000Z'}) // => "01:00:00 UTC+1 DST"
+easydate('h:m:s z x', {setDate: '2016-08-01T00:00:00.000Z', adjust: true}) // => "00:00:00 UTC+1 DST"
 ```
 
 ### Pattern Options
@@ -73,6 +128,7 @@ easydate('z', {timeZone: 'local'}) // => "UTC+1"
 * `s` Second (number - e.g. `33`)
 * `l` Millisecond (number - e.g. `001`)
 * `z` Timezone (string - e.g. `UTC`, `UTC+1`, `UTC-11`)
+* `x` DST (string - either `'DST'` or `''`)
 
 _N.B. Case sensitive_
 

@@ -1,18 +1,19 @@
 'use strict'
 
-function dst (date) {
+function checkDst (date) {
   function stdTimezoneOffset (date) {
     var jan = new Date(date.getFullYear(), 0, 1)
     var jul = new Date(date.getFullYear(), 6, 1)
     return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset())
   }
-  return stdTimezoneOffset(date) - date.getTimezoneOffset()
+  return (stdTimezoneOffset(date) - date.getTimezoneOffset()) > 0
 }
 
 function easydate (pattern, config) {
   var HOUR = 3600000
   var setDate = config ? config.setDate : null
   var time = config && config.timeZone ? config.timeZone : 'local'
+  var adjust = config ? config.adjust : false
   var date
   if (config && 'setDate' in config && !setDate) return null
   function tidyNumber (value) {
@@ -32,8 +33,11 @@ function easydate (pattern, config) {
   } else {
     date = new Date()
   }
-  var offset = new Date().getTimezoneOffset() + dst(date)
+  var dst
+  var offset = new Date().getTimezoneOffset()
   if (time === 'local') {
+    dst = checkDst(date)
+    if (adjust) { if (dst) date = new Date(date.valueOf() - HOUR) }
     var offsetString = 'UTC'
     if (offset < 0) offsetString += '+' + (String(offset).slice(1) / 60)
     if (offset > 0) offsetString += '-' + (offset / 60)
@@ -47,10 +51,9 @@ function easydate (pattern, config) {
     .replace('s', tidyNumber(date.getSeconds()))
     .replace('l', tidyMs(date.getMilliseconds()))
     .replace('z', offsetString)
+    .replace('x', dst ? 'DST' : '')
   }
-  if (offset < 0) date = new Date(date.valueOf() + (+offset * 60000))
-  if (offset > 0) date = new Date(date.valueOf() - (+offset * 60000))
-  // if (dst(date)) date = new Date(date.valueOf() + HOUR)
+  dst = checkDst(date)
   return pattern
   .replace('d', tidyNumber(date.getUTCDate()))
   .replace('M', tidyNumber(date.getUTCMonth() + 1))
@@ -61,6 +64,7 @@ function easydate (pattern, config) {
   .replace('s', tidyNumber(date.getUTCSeconds()))
   .replace('l', tidyMs(date.getUTCMilliseconds()))
   .replace('z', 'UTC')
+  .replace('x', dst ? 'DST' : '')
 }
 
 if (typeof module === 'object') module.exports = easydate

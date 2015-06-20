@@ -2,16 +2,6 @@
 
 var easydate = require('./easydate')
 var assert = require('assert')
-var offset = new Date().getTimezoneOffset()
-
-assert.equal(easydate('d/M/y', {
-  setDate: '2016-10-01T00:00:00.000Z', timeZone: 'local'
-}), '01/10/16')
-
-assert.equal(
-  easydate('d/M/y', {setDate: '2016-10-01T00:00:00.000Z', timeZone: 'utc'}),
-  offset > 0 || offset === 0 ? '01/10/16' : '30/09/16'
-)
 
 assert.equal(easydate('d/M/Y', {setDate: '2015-11-03T00:00:00.000Z'}), '03/11/2015')
 assert.equal(easydate('d-M-Y @ h:m', {setDate: '2015-11-03T16:06:00.000Z'}), '03-11-2015 @ 16:06')
