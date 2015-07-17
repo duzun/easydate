@@ -15,7 +15,7 @@ function easydate (pattern, config) {
   var time = config && config.timeZone ? config.timeZone : 'local'
   var adjust = config ? config.adjust : false
   var date
-  if (config && 'setDate' in config && !setDate) return null
+  if (typeof config === 'object' && config.hasOwnProperty('setDate') && !setDate) return null
   function tidyNumber (value) {
     if (value < 10) return '0' + String(value)
     return String(value)
