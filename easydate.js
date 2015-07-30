@@ -27,7 +27,11 @@ function easydate (pattern, config) {
   }
   if (setDate) {
     if (String(Date.parse(setDate)) === 'NaN') {
-      throw new Error('The supplied date string was not formatted correctly.')
+      throw {
+        name: 'Error',
+        message: 'The supplied date "' + setDate +
+          '" string was not formatted correctly.'
+      }
     }
     date = new Date(setDate)
   } else {

@@ -27,7 +27,7 @@ assert.notEqual(easydate('z', {setDate: '2015-11-03T16:06:00.000Z', timeZone: 'u
 
 // invalid string (aside from an empty string) will throw
 try {
-  easydate('M/d/Y', 'not valid')
+  easydate('M/d/Y', {setDate: 'not valid'})
 } catch (exception) {
   assert(exception)
 }
